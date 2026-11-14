@@ -105,19 +105,14 @@
     prefersReduced ? (el.textContent = target + suffix) : requestAnimationFrame(step);
   }
 
-  /* ---------- Typing effect ---------- */
-  const phrases = [
-    "Building UIs for Google AI Studio",
-    "Helping the world experiment with Gemini",
-    "Full stack · TypeScript · Angular",
-    "MSc Integrated ML Systems @ UCL (2026)",
-    "Speaks 7 languages — currently learning 日本語",
-  ];
+  /* ---------- Typing effect (localised via i18n.js) ---------- */
+  const phrasesFor = () => (window.I18N ? window.I18N.t("typed") : ["Building UIs for Google AI Studio"]);
   const typedEl = $("#typed");
   if (prefersReduced) {
-    typedEl.textContent = phrases[0];
+    typedEl.textContent = phrasesFor()[0];
+    window.addEventListener("langchange", () => { typedEl.textContent = phrasesFor()[0]; });
   } else {
-    let pi = 0, ci = 0, deleting = false;
+    let phrases = phrasesFor(), pi = 0, ci = 0, deleting = false, timer;
     const tick = () => {
       const word = phrases[pi];
       ci += deleting ? -1 : 1;
@@ -125,9 +120,15 @@
       let delay = deleting ? 28 : 55 + Math.random() * 45;
       if (!deleting && ci === word.length) { delay = 1900; deleting = true; }
       else if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; delay = 350; }
-      setTimeout(tick, delay);
+      timer = setTimeout(tick, delay);
     };
-    setTimeout(tick, 1100);
+    timer = setTimeout(tick, 1100);
+    window.addEventListener("langchange", () => {
+      clearTimeout(timer);
+      phrases = phrasesFor(); pi = 0; ci = 0; deleting = false;
+      typedEl.textContent = "";
+      timer = setTimeout(tick, 250);
+    });
   }
 
   /* ---------- "Hello" in his languages ---------- */

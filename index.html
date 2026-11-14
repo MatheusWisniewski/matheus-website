@@ -14,6 +14,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <script>
+    /* Pick the language before first paint (default English). Mirrors getInitial() in i18n.js. */
+    (function () {
+      var d = document.documentElement, lang = "en";
+      try {
+        var q = (new URLSearchParams(location.search).get("lang") || "").toLowerCase().slice(0, 2), saved = null;
+        try { saved = localStorage.getItem("lang"); } catch (e) {}
+        if (q === "pt" || q === "en") lang = q;
+        else if (saved === "pt" || saved === "en") lang = saved;
+        else {
+          var primary = ((navigator.languages && navigator.languages[0]) || navigator.language || "").toLowerCase();
+          var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || "");
+          var br = /^America\/(Sao_Paulo|Bahia|Fortaleza|Recife|Maceio|Belem|Araguaina|Santarem|Manaus|Cuiaba|Campo_Grande|Porto_Velho|Boa_Vista|Rio_Branco|Eirunepe|Noronha)$/;
+          if (primary.indexOf("pt") === 0 || br.test(tz)) lang = "pt";
+        }
+      } catch (e) {}
+      window.__LANG__ = lang;
+      if (lang === "pt") {
+        d.lang = "pt-BR"; d.classList.add("i18n-pending");
+        setTimeout(function () { d.classList.remove("i18n-pending"); }, 2500); /* failsafe */
+      }
+    })();
+  </script>
+  <style>.i18n-pending body { visibility: hidden; }</style>
 </head>
 <body>
   <div class="scroll-progress" aria-hidden="true"></div>
@@ -21,20 +45,25 @@
 
   <!-- NAV -->
   <header class="nav" id="nav">
-    <a href="#top" class="nav__logo" aria-label="Back to top">
+    <a href="#top" class="nav__logo" aria-label="Back to top" data-i18n-attr="aria-label:a1">
       <span class="gradient-text">MW</span>
     </a>
-    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <div class="nav__right">
+    <nav class="nav__links" id="navLinks">
+      <a href="#about" data-i18n="t1">About</a>
+      <a href="#experience" data-i18n="t2">Experience</a>
+      <a href="#skills" data-i18n="t3">Skills</a>
+      <a href="#education" data-i18n="t4">Education</a>
+      <a href="#languages" data-i18n="t5">Languages</a>
+      <a href="#contact" class="nav__cta" data-i18n="t6">Get in touch</a>
+    </nav>
+    <button class="lang-switch" type="button" aria-label="Ver em português">
+      <span data-lang="en" class="is-active">EN</span><span data-lang="pt">PT</span>
+    </button>
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" data-i18n-attr="aria-label:a2" aria-expanded="false">
       <span></span><span></span>
     </button>
-    <nav class="nav__links" id="navLinks">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
-      <a href="#education">Education</a>
-      <a href="#languages">Languages</a>
-      <a href="#contact" class="nav__cta">Get in touch</a>
-    </nav>
+    </div>
   </header>
 
   <main id="top">
@@ -44,20 +73,20 @@
       <canvas id="neural" aria-hidden="true"></canvas>
       <div class="hero__inner container">
         <div class="hero__text">
-          <p class="eyebrow reveal-hero" style="--d:0.1s">
+          <p class="eyebrow reveal-hero" style="--d:0.1s" data-i18n="t7">
             <span class="pulse-dot"></span> Software Engineer @ Google DeepMind
           </p>
-          <h1 class="hero__title reveal-hero" style="--d:0.25s">
+          <h1 class="hero__title reveal-hero" style="--d:0.25s" data-i18n="t8">
             Hi, I'm <span class="gradient-text">Matheus Wisniewski</span>.
           </h1>
-          <p class="hero__subtitle reveal-hero" style="--d:0.4s">
+          <p class="hero__subtitle reveal-hero" style="--d:0.4s" data-i18n="t9">
             I build the interfaces where people meet frontier AI.
           </p>
           <p class="hero__typed mono reveal-hero" style="--d:0.55s" aria-live="polite">
             <span class="prompt">&gt;</span> <span id="typed"></span><span class="caret">▍</span>
           </p>
           <div class="hero__actions reveal-hero" style="--d:0.7s">
-            <a href="#experience" class="btn btn--primary">View my journey</a>
+            <a href="#experience" class="btn btn--primary" data-i18n="t10">View my journey</a>
             <a href="https://www.linkedin.com/in/matheuswisniewski" target="_blank" rel="noopener" class="btn btn--ghost">
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
               LinkedIn
@@ -66,21 +95,21 @@
         </div>
         <div class="hero__photo reveal-hero" style="--d:0.3s">
           <div class="photo-ring">
-            <img src="assets/matheus.jpg" alt="Portrait of Matheus Wisniewski" width="600" height="600" />
+            <img src="assets/matheus.jpg" alt="Portrait of Matheus Wisniewski" data-i18n-attr="alt:a4" width="600" height="600" />
           </div>
           <div class="float-chip chip--1 mono">Gemini</div>
           <div class="float-chip chip--2 mono">AI Studio</div>
-          <div class="float-chip chip--3 mono">London 🇬🇧</div>
+          <div class="float-chip chip--3 mono" data-i18n="t11">London 🇬🇧</div>
         </div>
       </div>
-      <a href="#about" class="scroll-hint" aria-label="Scroll down">
+      <a href="#about" class="scroll-hint" aria-label="Scroll down" data-i18n-attr="aria-label:a3">
         <span></span>
       </a>
     </section>
 
     <!-- LOGO MARQUEE -->
-    <section class="marquee" aria-label="Organizations I've worked and studied at">
-      <p class="marquee__label mono">Where I've built, shipped &amp; studied</p>
+    <section class="marquee" aria-label="Organizations I've worked and studied at" data-i18n-attr="aria-label:a5">
+      <p class="marquee__label mono" data-i18n="t12">Where I've built, shipped &amp; studied</p>
       <div class="marquee__viewport">
         <div class="marquee__track">
           <div class="marquee__item"><img src="assets/logos/deepmind.png" alt="Google DeepMind logo" loading="lazy" /><span>Google DeepMind</span></div>
@@ -112,43 +141,43 @@
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">01</span>
-          <h2>About me</h2>
+          <h2 data-i18n="t13">About me</h2>
         </div>
         <div class="about">
           <div class="about__text reveal">
-            <p class="lead">
+            <p class="lead" data-i18n="t14">
               I'm a <strong>Full Stack Software Engineer</strong> in Google DeepMind's GenAI unit, crafting UIs for AI interaction platforms like <strong>Google AI Studio</strong> — tools that let researchers probe state-of-the-art models and let developers everywhere experiment with Gemini.
             </p>
-            <p>
+            <p data-i18n="t15">
               Despite working on highly technical problems, I relate very well with people and enjoy presenting to large audiences. An entrepreneurial streak drives me to keep seeking innovative ways to solve problems.
             </p>
-            <p>
+            <p data-i18n="t16">
               My path spans control &amp; automation engineering, optics, airport systems, fintech dashboards, YouTube partnerships and now generative AI — and next, an <strong>MSc in Integrated Machine Learning Systems at UCL</strong>.
             </p>
             <div class="hobbies">
-              <span class="tag">🗣️ Language learning</span>
-              <span class="tag">🧘 Meditation</span>
-              <span class="tag">📚 Reading</span>
-              <span class="tag">🏃 Running</span>
-              <span class="tag">🏊 Swimming</span>
+              <span class="tag" data-i18n="t17">🗣️ Language learning</span>
+              <span class="tag" data-i18n="t18">🧘 Meditation</span>
+              <span class="tag" data-i18n="t19">📚 Reading</span>
+              <span class="tag" data-i18n="t20">🏃 Running</span>
+              <span class="tag" data-i18n="t21">🏊 Swimming</span>
             </div>
           </div>
           <div class="stats reveal">
             <div class="stat">
               <span class="stat__num" data-count="10" data-suffix="+">0</span>
-              <span class="stat__label">Years building software</span>
+              <span class="stat__label" data-i18n="t22">Years building software</span>
             </div>
             <div class="stat">
               <span class="stat__num" data-count="7">0</span>
-              <span class="stat__label">Languages spoken</span>
+              <span class="stat__label" data-i18n="t23">Languages spoken</span>
             </div>
             <div class="stat">
               <span class="stat__num" data-count="4">0</span>
-              <span class="stat__label">Countries lived &amp; worked in</span>
+              <span class="stat__label" data-i18n="t24">Countries lived &amp; worked in</span>
             </div>
             <div class="stat">
               <span class="stat__num" data-count="2024">0</span>
-              <span class="stat__label">Joined Google DeepMind</span>
+              <span class="stat__label" data-i18n="t25">Joined Google DeepMind</span>
             </div>
           </div>
         </div>
@@ -160,7 +189,7 @@
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">02</span>
-          <h2>Experience</h2>
+          <h2 data-i18n="t2">Experience</h2>
         </div>
 
         <ol class="timeline">
@@ -170,13 +199,13 @@
               <div class="card__top">
                 <div class="logo-tile"><img src="assets/logos/deepmind.png" alt="Google DeepMind logo" loading="lazy" /></div>
                 <div class="card__title">
-                  <h3>Software Engineer</h3>
+                  <h3 data-i18n="t26">Software Engineer</h3>
                   <p class="company">Google DeepMind</p>
                 </div>
                 <span class="date mono">Feb 2024 — Present</span>
               </div>
-              <p>Full Stack Software Engineer in the GenAI unit. Developing UIs for AI interaction platforms (e.g. <strong>Google AI Studio</strong>), enabling internal researchers to test SOTA and unreleased model capabilities, and external users to experiment with Gemini.</p>
-              <div class="chips"><span>Generative AI</span><span>Full Stack</span><span>TypeScript</span><span>Angular</span></div>
+              <p data-i18n="t27">Full Stack Software Engineer in the GenAI unit. Developing UIs for AI interaction platforms (e.g. <strong>Google AI Studio</strong>), enabling internal researchers to test SOTA and unreleased model capabilities, and external users to experiment with Gemini.</p>
+              <div class="chips"><span data-i18n="t28">Generative AI</span><span>Full Stack</span><span>TypeScript</span><span>Angular</span></div>
             </div>
           </li>
 
@@ -186,23 +215,23 @@
               <div class="card__top">
                 <div class="logo-tile logo-tile--duo"><img src="assets/logos/google.png" alt="Google logo" loading="lazy" /><img class="logo-tile__badge" src="assets/logos/youtube.png" alt="YouTube logo" loading="lazy" /></div>
                 <div class="card__title">
-                  <h3>Partner Technology Manager · YouTube</h3>
+                  <h3 data-i18n="t29">Partner Technology Manager · YouTube</h3>
                   <p class="company">Google</p>
                 </div>
                 <span class="date mono">Nov 2019 — Feb 2024</span>
               </div>
-              <p>Managed technical engagements for the largest UK media partners on YouTube — API automations, bulk video uploads, live streams, data analysis and copyright protection via Content ID. Built internal dashboards, bridged product gaps, automated partner operations and took new initiatives from conception to deployment.</p>
+              <p data-i18n="t30">Managed technical engagements for the largest UK media partners on YouTube — API automations, bulk video uploads, live streams, data analysis and copyright protection via Content ID. Built internal dashboards, bridged product gaps, automated partner operations and took new initiatives from conception to deployment.</p>
               <div class="sub-roles">
                 <div class="sub-role">
-                  <div class="sub-role__head"><h4>Front-End Software Engineer · ML (20% role)</h4><span class="date mono">Jun — Dec 2023</span></div>
-                  <p>UI for a machine learning data-labeling product.</p>
+                  <div class="sub-role__head"><h4 data-i18n="t31">Front-End Software Engineer · ML (20% role)</h4><span class="date mono">Jun — Dec 2023</span></div>
+                  <p data-i18n="t32">UI for a machine learning data-labeling product.</p>
                 </div>
                 <div class="sub-role">
-                  <div class="sub-role__head"><h4>Front-End Software Engineer · NBU (20% role)</h4><span class="date mono">Dec 2022 — May 2023</span></div>
-                  <p>Internal research search website improving the accessibility and findability of Google's research output.</p>
+                  <div class="sub-role__head"><h4 data-i18n="t33">Front-End Software Engineer · NBU (20% role)</h4><span class="date mono">Dec 2022 — May 2023</span></div>
+                  <p data-i18n="t34">Internal research search website improving the accessibility and findability of Google's research output.</p>
                 </div>
               </div>
-              <div class="chips"><span>YouTube API</span><span>Data Analysis</span><span>Angular</span><span>TypeScript</span><span>Jasmine</span></div>
+              <div class="chips"><span>YouTube API</span><span data-i18n="t35">Data Analysis</span><span>Angular</span><span>TypeScript</span><span>Jasmine</span></div>
             </div>
           </li>
 
@@ -212,12 +241,12 @@
               <div class="card__top">
                 <div class="logo-tile logo-tile--wide"><img src="assets/logos/luxoft.svg" alt="Luxoft logo" loading="lazy" /></div>
                 <div class="card__title">
-                  <h3>Senior JavaScript Engineer</h3>
-                  <p class="company">Luxoft · Kraków, Poland</p>
+                  <h3 data-i18n="t36">Senior JavaScript Engineer</h3>
+                  <p class="company" data-i18n="t37">Luxoft · Kraków, Poland</p>
                 </div>
                 <span class="date mono">Dec 2018 — Sep 2019</span>
               </div>
-              <p>Investment and analysis dashboards for the financial market.</p>
+              <p data-i18n="t38">Investment and analysis dashboards for the financial market.</p>
               <div class="chips"><span>TypeScript</span><span>Angular</span><span>React</span><span>Redux</span><span>RamdaJS</span><span>SASS</span></div>
             </div>
           </li>
@@ -228,12 +257,12 @@
               <div class="card__top">
                 <div class="logo-tile logo-tile--bleed"><img src="assets/logos/james-delivery.png" alt="James Delivery logo" loading="lazy" /></div>
                 <div class="card__title">
-                  <h3>Front-End Angular Software Engineer</h3>
-                  <p class="company">James Delivery · Curitiba, Brazil</p>
+                  <h3 data-i18n="t39">Front-End Angular Software Engineer</h3>
+                  <p class="company" data-i18n="t40">James Delivery · Curitiba, Brazil</p>
                 </div>
                 <span class="date mono">Feb 2017 — Nov 2018</span>
               </div>
-              <p>Built the internal delivery-operations dashboard, a website + desktop app for partner establishments (orders, finances, menus) and the company's public website.</p>
+              <p data-i18n="t41">Built the internal delivery-operations dashboard, a website + desktop app for partner establishments (orders, finances, menus) and the company's public website.</p>
               <div class="chips"><span>Angular</span><span>Electron</span><span>TypeScript</span><span>SASS</span><span>Bootstrap</span></div>
             </div>
           </li>
@@ -244,12 +273,12 @@
               <div class="card__top">
                 <div class="logo-tile logo-tile--text" aria-label="CINQ Technologies"><span>CINQ</span></div>
                 <div class="card__title">
-                  <h3>Software Developer (C++ / iOS)</h3>
-                  <p class="company">CINQ Technologies · Curitiba, Brazil</p>
+                  <h3 data-i18n="t42">Software Developer (C++ / iOS)</h3>
+                  <p class="company" data-i18n="t43">CINQ Technologies · Curitiba, Brazil</p>
                 </div>
                 <span class="date mono">Oct 2015 — Feb 2017</span>
               </div>
-              <p>Message-exchange software for airport systems and an iPad baggage-tracking app, working in English-speaking SCRUM teams.</p>
+              <p data-i18n="t44">Message-exchange software for airport systems and an iPad baggage-tracking app, working in English-speaking SCRUM teams.</p>
               <div class="chips"><span>C++</span><span>C#</span><span>Objective-C</span><span>MFC</span><span>Cocoa</span></div>
             </div>
           </li>
@@ -260,13 +289,13 @@
               <div class="card__top">
                 <div class="logo-tile"><img src="assets/logos/furukawa.svg" alt="Furukawa Electric logo" loading="lazy" /></div>
                 <div class="card__title">
-                  <h3>Telecommunications Engineer Intern</h3>
+                  <h3 data-i18n="t45">Telecommunications Engineer Intern</h3>
                   <p class="company">Furukawa Electric Latam</p>
                 </div>
                 <span class="date mono">Aug 2014 — Oct 2015</span>
               </div>
-              <p>Technical support for FTTH (Fiber To The Home) projects across Latin America, passive optical network diagrams and VBA automation.</p>
-              <div class="chips"><span>FTTH</span><span>Optical Networks</span><span>VBA</span></div>
+              <p data-i18n="t46">Technical support for FTTH (Fiber To The Home) projects across Latin America, passive optical network diagrams and VBA automation.</p>
+              <div class="chips"><span>FTTH</span><span data-i18n="t47">Optical Networks</span><span>VBA</span></div>
             </div>
           </li>
 
@@ -276,13 +305,13 @@
               <div class="card__top">
                 <div class="logo-tile"><img src="assets/logos/utfpr.jpg" alt="UTFPR logo" loading="lazy" /></div>
                 <div class="card__title">
-                  <h3>Research &amp; Teaching Assistant</h3>
-                  <p class="company">UTFPR · Curitiba, Brazil</p>
+                  <h3 data-i18n="t48">Research &amp; Teaching Assistant</h3>
+                  <p class="company" data-i18n="t49">UTFPR · Curitiba, Brazil</p>
                 </div>
                 <span class="date mono">Jan 2012 — May 2013</span>
               </div>
-              <p>Researched and developed an optical system for measuring surface plasmon resonance (funded by Fundação Araucária). Tutored Calculus IV — Fourier and Laplace transforms.</p>
-              <div class="chips"><span>Optics</span><span>Research</span><span>Mathematics</span></div>
+              <p data-i18n="t50">Researched and developed an optical system for measuring surface plasmon resonance (funded by Fundação Araucária). Tutored Calculus IV — Fourier and Laplace transforms.</p>
+              <div class="chips"><span data-i18n="t51">Optics</span><span data-i18n="t52">Research</span><span data-i18n="t53">Mathematics</span></div>
             </div>
           </li>
         </ol>
@@ -294,32 +323,32 @@
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">03</span>
-          <h2>Skills &amp; tools</h2>
+          <h2 data-i18n="t54">Skills &amp; tools</h2>
         </div>
         <div class="skills-grid">
           <div class="skill-card reveal tilt">
             <div class="skill-card__icon">🧠</div>
-            <h3>AI &amp; Machine Learning</h3>
-            <p>Interfaces for frontier models, ML data-labeling tooling, and a deep interest in how AI meets society.</p>
-            <div class="chips"><span>Gemini</span><span>Generative AI</span><span>Machine Learning</span><span>AI Studio</span></div>
+            <h3 data-i18n="t55">AI &amp; Machine Learning</h3>
+            <p data-i18n="t56">Interfaces for frontier models, ML data-labeling tooling, and a deep interest in how AI meets society.</p>
+            <div class="chips"><span>Gemini</span><span data-i18n="t28">Generative AI</span><span>Machine Learning</span><span>AI Studio</span></div>
           </div>
           <div class="skill-card reveal tilt">
             <div class="skill-card__icon">⚡</div>
-            <h3>Front-End &amp; Full Stack</h3>
-            <p>Production web apps and dashboards, from fintech to research platforms.</p>
+            <h3 data-i18n="t57">Front-End &amp; Full Stack</h3>
+            <p data-i18n="t58">Production web apps and dashboards, from fintech to research platforms.</p>
             <div class="chips"><span>TypeScript</span><span>JavaScript</span><span>Angular</span><span>React</span><span>Redux</span><span>HTML/CSS</span><span>SASS</span><span>Electron</span></div>
           </div>
           <div class="skill-card reveal tilt">
             <div class="skill-card__icon">⚙️</div>
-            <h3>Systems &amp; Engineering</h3>
-            <p>Roots in control &amp; automation, optics and native software for airport systems.</p>
-            <div class="chips"><span>C++</span><span>C#</span><span>Objective-C</span><span>VBA</span><span>Optics</span></div>
+            <h3 data-i18n="t59">Systems &amp; Engineering</h3>
+            <p data-i18n="t60">Roots in control &amp; automation, optics and native software for airport systems.</p>
+            <div class="chips"><span>C++</span><span>C#</span><span>Objective-C</span><span>VBA</span><span data-i18n="t51">Optics</span></div>
           </div>
           <div class="skill-card reveal tilt">
             <div class="skill-card__icon">🤝</div>
-            <h3>Partnerships &amp; Delivery</h3>
-            <p>Leading technical engagements with major media partners and shipping initiatives end-to-end.</p>
-            <div class="chips"><span>Technical Mgmt</span><span>Data Analysis</span><span>SCRUM</span><span>Jira</span><span>Git</span></div>
+            <h3 data-i18n="t61">Partnerships &amp; Delivery</h3>
+            <p data-i18n="t62">Leading technical engagements with major media partners and shipping initiatives end-to-end.</p>
+            <div class="chips"><span data-i18n="t63">Technical Mgmt</span><span data-i18n="t35">Data Analysis</span><span>SCRUM</span><span>Jira</span><span>Git</span></div>
           </div>
         </div>
       </div>
@@ -330,49 +359,49 @@
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">04</span>
-          <h2>Education</h2>
+          <h2 data-i18n="t4">Education</h2>
         </div>
         <div class="edu-grid">
           <article class="edu reveal">
-            <span class="edu__badge mono">Upcoming</span>
+            <span class="edu__badge mono" data-i18n="t64">Upcoming</span>
             <div class="logo-tile logo-tile--lg logo-tile--bleed"><img src="assets/logos/ucl.png" alt="UCL logo" loading="lazy" /></div>
             <span class="date mono">2026 — 2028</span>
-            <h3>MSc, Integrated Machine Learning Systems</h3>
+            <h3 data-i18n="t65">MSc, Integrated Machine Learning Systems</h3>
             <p>UCL — University College London</p>
           </article>
           <article class="edu reveal">
             <div class="logo-tile logo-tile--lg logo-tile--wide"><img src="assets/logos/ufpr.svg" alt="UFPR logo" loading="lazy" /></div>
             <span class="date mono">2017 — 2019</span>
-            <h3>Postgraduate Course, Software Engineering</h3>
+            <h3 data-i18n="t66">Postgraduate Course, Software Engineering</h3>
             <p>Universidade Federal do Paraná (UFPR)</p>
           </article>
           <article class="edu reveal">
             <div class="logo-tile logo-tile--lg logo-tile--wide"><img src="assets/logos/institut-optique.svg" alt="Institut d'Optique logo" loading="lazy" /></div>
             <span class="date mono">2013 — 2014</span>
-            <h3>B.E., Optical Engineering</h3>
-            <p>Institut d'Optique · France <span class="muted">— Science Without Borders scholar</span></p>
+            <h3 data-i18n="t67">B.E., Optical Engineering</h3>
+            <p data-i18n="t68">Institut d'Optique · France <span class="muted">— Science Without Borders scholar</span></p>
           </article>
           <article class="edu reveal">
             <div class="logo-tile logo-tile--lg"><img src="assets/logos/utfpr.jpg" alt="UTFPR logo" loading="lazy" /></div>
             <span class="date mono">2010 — 2016</span>
-            <h3>B.E., Control &amp; Automation Engineering</h3>
-            <p>Universidade Tecnológica Federal do Paraná <span class="muted">— Best student, class of 2016</span></p>
+            <h3 data-i18n="t69">B.E., Control &amp; Automation Engineering</h3>
+            <p data-i18n="t70">Universidade Tecnológica Federal do Paraná <span class="muted">— Best student, class of 2016</span></p>
           </article>
         </div>
 
         <div class="awards">
           <div class="awards__col reveal">
-            <h3 class="awards__title">🏆 Honors &amp; awards</h3>
+            <h3 class="awards__title" data-i18n="t71">🏆 Honors &amp; awards</h3>
             <ul>
-              <li>Best student of the Control &amp; Automation Engineering class of 2016</li>
-              <li>Science Without Borders full scholarship laureate</li>
-              <li>1st place (Group A) — 32nd Japanese Speech Contest of Paraná <span class="muted">(パラナ・スピーチ・コンテスト)</span></li>
-              <li>3rd place — Startup Weekend Education Curitiba</li>
-              <li>2nd place — Hackathon Copel</li>
+              <li data-i18n="t72">Best student of the Control &amp; Automation Engineering class of 2016</li>
+              <li data-i18n="t73">Science Without Borders full scholarship laureate</li>
+              <li data-i18n="t74">1st place (Group A) — 32nd Japanese Speech Contest of Paraná <span class="muted">(パラナ・スピーチ・コンテスト)</span></li>
+              <li data-i18n="t75">3rd place — Startup Weekend Education Curitiba</li>
+              <li data-i18n="t76">2nd place — Hackathon Copel</li>
             </ul>
           </div>
           <div class="awards__col reveal">
-            <h3 class="awards__title">📜 Certifications</h3>
+            <h3 class="awards__title" data-i18n="t77">📜 Certifications</h3>
             <ul>
               <li>AI and Society</li>
               <li>Diplôme Approfondi de Langue Française (DALF C2)</li>
@@ -390,19 +419,19 @@
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">05</span>
-          <h2>Languages</h2>
+          <h2 data-i18n="t5">Languages</h2>
         </div>
         <p class="hello reveal" aria-live="polite">
           <span class="hello__word gradient-text" id="hello">Hello</span>
         </p>
         <div class="lang-grid">
-          <div class="lang reveal" data-level="100"><div class="lang__top"><span>Portuguese</span><span class="muted">Native</span></div><div class="bar"><i></i></div></div>
-          <div class="lang reveal" data-level="92"><div class="lang__top"><span>English</span><span class="muted">Full professional · CPE</span></div><div class="bar"><i></i></div></div>
-          <div class="lang reveal" data-level="92"><div class="lang__top"><span>French</span><span class="muted">Full professional · DALF C2</span></div><div class="bar"><i></i></div></div>
-          <div class="lang reveal" data-level="88"><div class="lang__top"><span>Spanish</span><span class="muted">Full professional</span></div><div class="bar"><i></i></div></div>
-          <div class="lang reveal" data-level="55"><div class="lang__top"><span>Japanese</span><span class="muted">Limited working · learning</span></div><div class="bar"><i></i></div></div>
-          <div class="lang reveal" data-level="25"><div class="lang__top"><span>Italian</span><span class="muted">Elementary</span></div><div class="bar"><i></i></div></div>
-          <div class="lang reveal" data-level="25"><div class="lang__top"><span>Polish</span><span class="muted">Elementary</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="100"><div class="lang__top"><span data-i18n="t78">Portuguese</span><span class="muted" data-i18n="t79">Native</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="92"><div class="lang__top"><span data-i18n="t80">English</span><span class="muted" data-i18n="t81">Full professional · CPE</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="92"><div class="lang__top"><span data-i18n="t82">French</span><span class="muted" data-i18n="t83">Full professional · DALF C2</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="88"><div class="lang__top"><span data-i18n="t84">Spanish</span><span class="muted" data-i18n="t85">Full professional</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="55"><div class="lang__top"><span data-i18n="t86">Japanese</span><span class="muted" data-i18n="t87">Limited working · learning</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="25"><div class="lang__top"><span data-i18n="t88">Italian</span><span class="muted" data-i18n="t89">Elementary</span></div><div class="bar"><i></i></div></div>
+          <div class="lang reveal" data-level="25"><div class="lang__top"><span data-i18n="t90">Polish</span><span class="muted" data-i18n="t89">Elementary</span></div><div class="bar"><i></i></div></div>
         </div>
       </div>
     </section>
@@ -411,14 +440,14 @@
     <section class="section contact" id="contact">
       <div class="container">
         <div class="contact__box reveal">
-          <h2>Let's build something <span class="gradient-text">intelligent</span>.</h2>
-          <p>Whether it's AI, product, or a chat in any of seven languages — my inbox is open.</p>
+          <h2 data-i18n="t91">Let's build something <span class="gradient-text">intelligent</span>.</h2>
+          <p data-i18n="t92">Whether it's AI, product, or a chat in any of seven languages — my inbox is open.</p>
           <div class="hero__actions contact__actions">
             <a href="mailto:matheus.maw@gmail.com" class="btn btn--primary">
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.24-8 5-8-5V6l8 5 8-5v2.24z"/></svg>
               matheus.maw@gmail.com
             </a>
-            <a href="https://www.linkedin.com/in/matheuswisniewski" target="_blank" rel="noopener" class="btn btn--ghost">Connect on LinkedIn</a>
+            <a href="https://www.linkedin.com/in/matheuswisniewski" target="_blank" rel="noopener" class="btn btn--ghost" data-i18n="t93">Connect on LinkedIn</a>
           </div>
         </div>
       </div>
@@ -428,10 +457,11 @@
   <footer class="footer">
     <div class="container footer__inner">
       <span>© <span id="year"></span> Matheus Wisniewski</span>
-      <span class="muted mono">London, UK</span>
+      <span class="muted mono" data-i18n="t94">London, UK</span>
     </div>
   </footer>
 
+  <script src="i18n.js"></script>
   <script src="script.js"></script>
   <script type="module" src="hero3d.js"></script>
 </body>

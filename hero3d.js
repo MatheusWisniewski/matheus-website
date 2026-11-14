@@ -348,4 +348,5 @@ function init(THREE) {
   // the portrait animates in, so re-anchor once fonts/layout settle
   window.addEventListener("load", onResize);
   document.fonts?.ready.then(onResize);
+  window.addEventListener("langchange", onResize);
 }

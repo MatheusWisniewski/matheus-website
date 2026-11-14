@@ -7,6 +7,7 @@ A static, dependency-free site (HTML + CSS + vanilla JS) featuring:
 - A **Three.js "neural core"** hero: a breathing network of neurons orbiting the portrait, with signals firing along synapses (falls back to a 2D canvas when WebGL is unavailable).
 - Company & university logos, an infinite logo marquee and an animated experience timeline.
 - Scroll-reveal animations, typing effect, count-up stats, card spotlight/tilt and a multilingual "Hello".
+- `EN / PT-BR` language switch (`?lang=pt|en` URL support, `localStorage` persistence, and automatic Portuguese selection for visitors with a `pt*` browser language or Brazilian timezone, defaulting to English).
 - Fully responsive layout and `prefers-reduced-motion` support.
 
 ## Run locally
