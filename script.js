@@ -13,18 +13,19 @@
   const toggle = $("#navToggle");
   const links = $("#navLinks");
 
-  toggle.addEventListener("click", () => {
-    const open = links.classList.toggle("open");
+  const setMenu = (open) => {
+    links.classList.toggle("open", open);
     toggle.setAttribute("aria-expanded", String(open));
     document.body.style.overflow = open ? "hidden" : "";
+  };
+  toggle.addEventListener("click", () => setMenu(!links.classList.contains("open")));
+  $$("a", links).forEach((a) => a.addEventListener("click", () => setMenu(false)));
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && links.classList.contains("open")) { setMenu(false); toggle.focus(); }
   });
-  $$("a", links).forEach((a) =>
-    a.addEventListener("click", () => {
-      links.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-    })
-  );
+  window.matchMedia("(min-width: 821px)").addEventListener("change", (e) => {
+    if (e.matches && links.classList.contains("open")) setMenu(false);
+  });
 
   const sections = $$("main section[id]");
   const navMap = new Map($$("a[href^='#']", links).map((a) => [a.getAttribute("href").slice(1), a]));
@@ -93,16 +94,17 @@
   function countUp(el) {
     const target = +el.dataset.count;
     const suffix = el.dataset.suffix || "";
-    const start = target > 1000 ? target - 30 : 0;
+    // calendar years (e.g. 2024) are dates, not quantities: show them as-is
+    if (prefersReduced || target >= 1900) { el.textContent = target + suffix; return; }
     const dur = 1600;
     const t0 = performance.now();
     const step = (t) => {
       const k = Math.min(1, (t - t0) / dur);
       const eased = 1 - Math.pow(1 - k, 4);
-      el.textContent = Math.round(start + (target - start) * eased) + (k === 1 ? suffix : "");
+      el.textContent = Math.round(target * eased) + suffix;
       if (k < 1) requestAnimationFrame(step);
     };
-    prefersReduced ? (el.textContent = target + suffix) : requestAnimationFrame(step);
+    requestAnimationFrame(step);
   }
 
   /* ---------- Typing effect (localised via i18n.js) ---------- */
@@ -170,16 +172,22 @@
     }
 
     const glow = $(".cursor-glow");
-    let gx = 0, gy = 0, tx = 0, ty = 0;
-    window.addEventListener("pointermove", (e) => { tx = e.clientX; ty = e.clientY; }, { passive: true });
+    let gx = 0, gy = 0, tx = 0, ty = 0, gliding = false;
+    // the glow eases toward the pointer, then the loop sleeps until the pointer moves again
     const follow = () => {
       gx += (tx - gx) * 0.12; gy += (ty - gy) * 0.12;
       glow.style.transform = `translate(${gx - 260}px, ${gy - 260}px)`;
+      if (Math.hypot(tx - gx, ty - gy) < 0.5) { gliding = false; return; }
       requestAnimationFrame(follow);
     };
     glow.style.left = glow.style.top = "0";
     glow.style.transform = "translate(-9999px,-9999px)";
-    if (!prefersReduced) follow();
+    if (!prefersReduced) {
+      window.addEventListener("pointermove", (e) => {
+        tx = e.clientX; ty = e.clientY;
+        if (!gliding) { gliding = true; requestAnimationFrame(follow); }
+      }, { passive: true });
+    }
   }
 
   /* ---------- 2D neural network canvas (fallback when WebGL is unavailable) ---------- */
@@ -283,11 +291,13 @@
 
   let rt;
   window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 150); });
-  const hero = $(".hero");
-  hero.addEventListener("pointermove", (e) => {
-    const r = canvas.getBoundingClientRect();
-    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-  });
-  hero.addEventListener("pointerleave", () => { mouse.x = mouse.y = -9999; });
+  if (!prefersReduced) {
+    const hero = $(".hero");
+    hero.addEventListener("pointermove", (e) => {
+      const r = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+    });
+    hero.addEventListener("pointerleave", () => { mouse.x = mouse.y = -9999; });
+  }
   };
 })();

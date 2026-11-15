@@ -269,11 +269,13 @@ function init(THREE) {
 
   /* ---------------- Interaction ---------------- */
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
-  hero.addEventListener("pointermove", (e) => {
-    pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
-    pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
-  });
-  hero.addEventListener("pointerleave", () => { pointer.tx = pointer.ty = 0; });
+  if (!reduced) {
+    hero.addEventListener("pointermove", (e) => {
+      pointer.tx = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.ty = (e.clientY / window.innerHeight) * 2 - 1;
+    });
+    hero.addEventListener("pointerleave", () => { pointer.tx = pointer.ty = 0; });
+  }
 
   /* ---------------- Loop ---------------- */
   const clock = new THREE.Clock();
@@ -281,7 +283,8 @@ function init(THREE) {
   let scrollK = 0;
 
   function render() {
-    const t = clock.getElapsedTime();
+    // reduced motion: a single, genuinely static frame (re-rendered only on resize)
+    const t = reduced ? 0 : clock.getElapsedTime();
     uniforms.uTime.value = t;
 
     pointer.x += (pointer.tx - pointer.x) * 0.05;
@@ -338,9 +341,11 @@ function init(THREE) {
   io.observe(hero);
   if (reduced) render();
 
-  window.addEventListener("scroll", () => {
-    scrollK = Math.min(1, Math.max(0, window.scrollY / hero.clientHeight));
-  }, { passive: true });
+  if (!reduced) {
+    window.addEventListener("scroll", () => {
+      scrollK = Math.min(1, Math.max(0, window.scrollY / hero.clientHeight));
+    }, { passive: true });
+  }
 
   let rt;
   const onResize = () => { clearTimeout(rt); rt = setTimeout(() => { layout(); if (!running) render(); }, 120); };
