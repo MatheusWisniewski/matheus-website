@@ -110,6 +110,8 @@
       "t90": "Polonês",
       "t91": "Vamos construir algo <span class=\"gradient-text\">inteligente</span>.",
       "t92": "Seja para falar de IA, produto ou bater um papo em qualquer um dos sete idiomas — é só me escrever.",
+      "contact_mailto": "mailto:oi@matheuswisniewski.com",
+      "contact_email": "oi@matheuswisniewski.com",
       "t93": "Conectar no LinkedIn",
       "t94": "Londres, Reino Unido",
       "lab_nav": "Lab",
