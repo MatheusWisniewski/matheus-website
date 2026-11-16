@@ -449,32 +449,92 @@
       </div>
     </section>
 
-    <!-- OPTICS LAB -->
+    <!-- HOW AI WRITES -->
     <section class="section" id="lab">
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">06</span>
-          <h2 data-i18n="lab_title">Optics Lab</h2>
+          <h2 data-i18n="lab_title">How AI Writes</h2>
         </div>
-        <p class="lab-lead reveal" data-i18n="lab_lead">Real Snell, FTTH fiber, and plasmon physics — drag to bend the beam.</p>
+        <p class="lab-lead reveal" data-i18n="lab_lead">AI doesn't look up pre-written answers — it predicts text one piece at a time. Explore the three steps behind every reply.</p>
 
         <div class="lab-stage reveal">
           <div class="lab-stage__top">
-            <div class="lab-tabs" role="tablist" aria-label="Optical physics modes" data-i18n-attr="aria-label:lab_modes_aria">
-              <button type="button" class="lab-tab is-active" role="tab" id="labTabPrism" aria-selected="true" aria-controls="labCanvasWrap" tabindex="0" data-mode="prism" data-i18n="lab_mode_prism">Prism</button>
-              <button type="button" class="lab-tab" role="tab" id="labTabFiber" aria-selected="false" aria-controls="labCanvasWrap" tabindex="-1" data-mode="fiber" data-i18n="lab_mode_fiber">Fiber</button>
-              <button type="button" class="lab-tab" role="tab" id="labTabSpr" aria-selected="false" aria-controls="labCanvasWrap" tabindex="-1" data-mode="spr" data-i18n="lab_mode_spr">SPR</button>
+            <div class="lab-steps" role="tablist" aria-label="Three steps of how AI writes" data-i18n-attr="aria-label:lab_modes_aria">
+              <button type="button" class="lab-step is-active" role="tab" id="labTabTokens" aria-selected="true" aria-controls="labPanelTokens" tabindex="0" data-step="tokens" data-i18n="lab_s1">1 · Split into pieces</button>
+              <button type="button" class="lab-step" role="tab" id="labTabAttn" aria-selected="false" aria-controls="labPanelAttn" tabindex="-1" data-step="attention" data-i18n="lab_s2">2 · Connect clues</button>
+              <button type="button" class="lab-step" role="tab" id="labTabPredict" aria-selected="false" aria-controls="labPanelPredict" tabindex="-1" data-step="predict" data-i18n="lab_s3">3 · Guess next word</button>
             </div>
-            <button type="button" class="lab-reset mono" id="labReset" data-i18n="lab_reset">Reset</button>
           </div>
 
-          <div class="lab-canvas-wrap" id="labCanvasWrap" role="tabpanel" aria-labelledby="labTabPrism">
-            <canvas id="labCanvas" class="lab-canvas" aria-hidden="true"></canvas>
-            <div class="lab-readout mono" id="labReadout" aria-hidden="true">+8° · Cauchy dispersion</div>
-            <button type="button" class="lab-handle" id="labHandle" role="slider" aria-label="Prism tilt angle" aria-valuemin="-48" aria-valuemax="48" aria-valuenow="8" aria-valuetext="+8° · Cauchy dispersion" aria-orientation="horizontal"></button>
+          <!-- CHAPTER 1: TOKENIZER -->
+          <div class="lab-panel" id="labPanelTokens" role="tabpanel" aria-labelledby="labTabTokens">
+            <div class="lab-tok-top">
+              <label class="lab-field-label" for="tokInput" data-i18n="lab_tok_label">Type anything — try your name or an emoji:</label>
+              <div class="lab-tok-input-row">
+                <input id="tokInput" class="lab-input mono" type="text" maxlength="85" autocomplete="off" spellcheck="false" placeholder="Type anything — try your name or an emoji!" data-i18n-attr="placeholder:lab_tok_ph" />
+                <span class="lab-counter mono" id="tokStats">6 words → 9 token pieces</span>
+              </div>
+            </div>
+
+            <div class="lab-tok-toolbar">
+              <div class="lab-chips" id="tokSamples"></div>
+              <div class="lab-seg" role="tablist" aria-label="Display mode" data-i18n-attr="aria-label:lab_view_aria">
+                <button type="button" class="lab-seg__btn is-active" role="tab" aria-selected="true" tabindex="0" data-view="pieces" data-i18n="lab_v_pieces">Pieces</button>
+                <button type="button" class="lab-seg__btn" role="tab" aria-selected="false" tabindex="-1" data-view="numbers" data-i18n="lab_v_nums">AI's Numbers</button>
+              </div>
+            </div>
+
+            <div class="lab-tok-stage">
+              <div class="lab-tok-list" id="tokList"></div>
+            </div>
           </div>
 
-          <p class="lab-hint" id="labHint">Drag the ring or use Arrow keys to tilt the prism — push past the critical angle for internal reflection</p>
+          <!-- CHAPTER 2: ATTENTION SPOTLIGHT -->
+          <div class="lab-panel" id="labPanelAttn" role="tabpanel" aria-labelledby="labTabAttn" hidden>
+            <div class="lab-attn-top">
+              <div class="lab-chips" id="attnScenarios"></div>
+              <p class="lab-subhint" data-i18n="lab_attn_prompt">Tap the highlighted word to flip the meaning — or tap any word to move the spotlight</p>
+            </div>
+
+            <div class="lab-attn-stage" id="attnStage">
+              <svg class="lab-attn-svg" id="attnSvg" aria-hidden="true"></svg>
+              <div class="lab-attn-words" id="attnWords"></div>
+            </div>
+
+            <p class="lab-explain" id="attnExplain"></p>
+          </div>
+
+          <!-- CHAPTER 3: NEXT-WORD PREDICTION -->
+          <div class="lab-panel" id="labPanelPredict" role="tabpanel" aria-labelledby="labTabPredict" hidden>
+            <div class="lab-pred-top">
+              <div class="lab-chips" id="predPrompts"></div>
+              <div class="lab-seg" role="tablist" aria-label="Creativity mood" data-i18n-attr="aria-label:lab_mood_aria">
+                <button type="button" class="lab-seg__btn" role="tab" aria-selected="false" tabindex="-1" data-mood="safe" data-i18n="lab_m_safe">Safe</button>
+                <button type="button" class="lab-seg__btn is-active" role="tab" aria-selected="true" tabindex="0" data-mood="balanced" data-i18n="lab_m_bal">Balanced</button>
+                <button type="button" class="lab-seg__btn" role="tab" aria-selected="false" tabindex="-1" data-mood="wild" data-i18n="lab_m_wild">Wild</button>
+              </div>
+            </div>
+
+            <div class="lab-sentence-box" id="predSentence"></div>
+
+            <div class="lab-pred-bars" id="predBars"></div>
+
+            <div class="lab-pred-actions">
+              <span class="lab-subhint" data-i18n="lab_pred_hint">Click any guess above to add it — or let the AI roll the dice</span>
+              <div class="lab-pred-btns">
+                <button type="button" class="lab-reset mono" id="predReset" data-i18n="lab_pred_reset">Restart</button>
+                <button type="button" class="btn btn--primary lab-roll-btn" id="predRoll">
+                  <span data-i18n="lab_pred_roll">Pick next piece</span> <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="lab-footer">
+            <p class="lab-takeaway" id="labTakeaway"></p>
+            <button type="button" class="lab-next mono" id="labNextStep">Next: Connect clues →</button>
+          </div>
         </div>
       </div>
     </section>
@@ -507,6 +567,6 @@
   <script src="i18n.js"></script>
   <script src="script.js"></script>
   <script type="module" src="hero3d.js"></script>
-  <script type="module" src="lab3d.js"></script>
+  <script type="module" src="llm-lab.js"></script>
 </body>
 </html>
