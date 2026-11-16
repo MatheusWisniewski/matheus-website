@@ -23,7 +23,7 @@
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && links.classList.contains("open")) { setMenu(false); toggle.focus(); }
   });
-  window.matchMedia("(min-width: 821px)").addEventListener("change", (e) => {
+  window.matchMedia("(min-width: 921px)").addEventListener("change", (e) => {
     if (e.matches && links.classList.contains("open")) setMenu(false);
   });
 
