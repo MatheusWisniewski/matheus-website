@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="8" y1="4" x2="56" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#111a30" />
+      <stop offset="100%" stop-color="#070b14" />
+    </linearGradient>
+    <radialGradient id="glow" cx="32" cy="18" r="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#9b72ff" stop-opacity="0.34" />
+      <stop offset="65%" stop-color="#4f8cff" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#070b14" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="brand" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5b96ff" />
+      <stop offset="52%" stop-color="#a67fff" />
+      <stop offset="100%" stop-color="#ef7acc" />
+    </linearGradient>
+    <linearGradient id="letter" x1="32" y1="24" x2="32" y2="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#d8e4ff" />
+    </linearGradient>
+  </defs>
+
+  <!-- Obsidian squircle + ambient neural halo -->
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#bg)" />
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#glow)" />
+  <!-- Crisp luminous frame for dark and light browser tabs -->
+  <rect x="3.25" y="3.25" width="57.5" height="57.5" rx="13.75" fill="none" stroke="url(#brand)" stroke-width="2.4" />
+
+  <!-- Architectural M -->
+  <path
+    d="M 15.5 47 V 25.5 L 32 42 L 48.5 25.5 V 47"
+    fill="none"
+    stroke="url(#letter)"
+    stroke-width="7.2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Frontier AI / optical 4-point spark above the M valley -->
+  <path
+    d="M 32 7.5 Q 33.7 14.8 41 16.5 Q 33.7 18.2 32 25.5 Q 30.3 18.2 23 16.5 Q 30.3 14.8 32 7.5 Z"
+    fill="url(#brand)"
+  />
+  <circle cx="32" cy="16.5" r="1.9" fill="#ffffff" />
+</svg>
