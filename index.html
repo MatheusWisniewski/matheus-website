@@ -449,128 +449,32 @@
       </div>
     </section>
 
-    <!-- EVAL LAB -->
+    <!-- OPTICS LAB -->
     <section class="section" id="lab">
       <div class="container">
         <div class="section__head reveal">
           <span class="section__index mono">06</span>
-          <h2 data-i18n="lab_title">Eval Lab</h2>
+          <h2 data-i18n="lab_title">Optics Lab</h2>
         </div>
-        <p class="lab-lead reveal" data-i18n="lab_lead">
-          Explore how rubric-driven <strong>LLM-as-a-judge</strong> pipelines hill-climb app generation quality across a 3D fitness landscape — catching broken regressions while climbing from zero-shot baseline to shippable builds, alongside live daily AI research.
-        </p>
+        <p class="lab-lead reveal" data-i18n="lab_lead">Real Snell, FTTH fiber, and plasmon physics — drag to bend the beam.</p>
 
-        <div class="lab-grid reveal">
-          <div class="lab-stage">
-            <div class="lab-stage__top">
-              <div class="lab-tabs" role="tablist" data-i18n-attr="aria-label:lab_prompt_aria" aria-label="Select eval benchmark suite">
-                <button type="button" class="lab-tab is-active" role="tab" aria-selected="true" tabindex="0" data-suite="vibe" data-i18n="lab_p_studio">Vibe UI · Angular</button>
-                <button type="button" class="lab-tab" role="tab" aria-selected="false" tabindex="-1" data-suite="fullstack" data-i18n="lab_p_fullstack">Full-Stack · Kotlin</button>
-                <button type="button" class="lab-tab" role="tab" aria-selected="false" tabindex="-1" data-suite="optics" data-i18n="lab_p_optics">Optics · Canvas</button>
-                <button type="button" class="lab-tab" role="tab" aria-selected="false" tabindex="-1" data-suite="polyglot" data-i18n="lab_p_polyglot">7 Languages</button>
-              </div>
-              <button type="button" class="lab-reset mono" id="labReset" data-i18n="lab_reset">Reset</button>
+        <div class="lab-stage reveal">
+          <div class="lab-stage__top">
+            <div class="lab-tabs" role="tablist" aria-label="Optical physics modes" data-i18n-attr="aria-label:lab_modes_aria">
+              <button type="button" class="lab-tab is-active" role="tab" id="labTabPrism" aria-selected="true" aria-controls="labCanvasWrap" tabindex="0" data-mode="prism" data-i18n="lab_mode_prism">Prism</button>
+              <button type="button" class="lab-tab" role="tab" id="labTabFiber" aria-selected="false" aria-controls="labCanvasWrap" tabindex="-1" data-mode="fiber" data-i18n="lab_mode_fiber">Fiber</button>
+              <button type="button" class="lab-tab" role="tab" id="labTabSpr" aria-selected="false" aria-controls="labCanvasWrap" tabindex="-1" data-mode="spr" data-i18n="lab_mode_spr">SPR</button>
             </div>
-
-            <div class="lab-stream mono" id="labStream"><span class="lab-stream__prompt" id="labPromptText"></span><span class="lab-stream__gen" id="labGenText"></span><span class="lab-stream__cursor" aria-hidden="true">▍</span></div>
-
-            <div class="lab-canvas-wrap" id="labCanvasWrap">
-              <canvas id="labCanvas" class="lab-canvas" tabindex="0" data-i18n-attr="aria-label:lab_canvas_aria" aria-label="Interactive 3D hill-climbing eval landscape. Use Left and Right arrow keys to inspect candidate builds and Enter or Space to evaluate the focused build."></canvas>
-              <div class="lab-axis-badge mono" aria-hidden="true">θ₁ × θ₂ · Judge(app)</div>
-              <div class="lab-tip mono" id="labTip"></div>
-            </div>
-
-            <p class="lab-hint" data-i18n="lab_hint">Drag to orbit · Click a 3D beacon (or candidate below) to inspect its LLM-judge verdict</p>
-
-            <div class="lab-bars" id="labBars" role="group" data-i18n-attr="aria-label:lab_bars_aria" aria-label="Candidate pipeline iterations"></div>
-
-            <ul class="lab-legend">
-              <li><i class="lg-swatch lg-samp" aria-hidden="true"></i><span data-i18n="lab_leg_samp">Active build</span></li>
-              <li><i class="lg-swatch lg-nuc" aria-hidden="true"></i><span data-i18n="lab_leg_nuc">Passes gate (≥ τ)</span></li>
-              <li><i class="lg-swatch lg-prune" aria-hidden="true"></i><span data-i18n="lab_leg_prune">Rejected (&lt; τ)</span></li>
-            </ul>
-
-            <div class="lab-stage__footer">
-              <div class="lab-kpis">
-                <div class="lab-kpi">
-                  <span class="lab-kpi__label" data-i18n="lab_kpi_ent">Judge score</span>
-                  <output class="lab-kpi__val mono" id="labScore" for="labWFunc labWUx labGate">82.6%</output>
-                </div>
-                <div class="lab-kpi">
-                  <span class="lab-kpi__label" data-i18n="lab_kpi_nuc">Climb vs v0</span>
-                  <output class="lab-kpi__val mono" id="labGain" for="labWFunc labWUx labGate">+30.2 pts</output>
-                </div>
-                <div class="lab-kpi">
-                  <span class="lab-kpi__label" data-i18n="lab_kpi_top1">Passing gate</span>
-                  <output class="lab-kpi__val mono" id="labPassCount" for="labWFunc labWUx labGate">3 / 7</output>
-                </div>
-              </div>
-              <button type="button" class="btn btn--primary lab-sample-btn" id="labSample">
-                <span data-i18n="lab_sample">Climb +1 step</span> <span aria-hidden="true">→</span>
-              </button>
-            </div>
+            <button type="button" class="lab-reset mono" id="labReset" data-i18n="lab_reset">Reset</button>
           </div>
 
-          <div class="lab-side">
-            <div class="lab-card">
-              <div class="lab-card__head">
-                <h3 data-i18n="lab_ctrl_title">LLM-as-a-Judge Rubric</h3>
-                <span class="lab-formula mono">J = Σ wᵢ · scoreᵢ</span>
-              </div>
-
-              <div class="lab-presets" role="group" data-i18n-attr="aria-label:lab_presets_aria" aria-label="Rubric presets">
-                <button type="button" class="lab-preset is-active" data-preset="balanced" data-i18n="lab_pre_bal">Balanced</button>
-                <button type="button" class="lab-preset" data-preset="ux" data-i18n="lab_pre_ux">UX Craft</button>
-                <button type="button" class="lab-preset" data-preset="strict" data-i18n="lab_pre_strict">Strict Runtime</button>
-              </div>
-
-              <div class="lab-ctrl">
-                <div class="lab-ctrl__row">
-                  <label for="labWFunc" data-i18n="lab_c_func">Compile &amp; Logic (w₁)</label>
-                  <output class="mono" id="labWFuncOut" for="labWFunc">0.85</output>
-                </div>
-                <input id="labWFunc" type="range" min="0.10" max="1.00" step="0.05" value="0.85" aria-valuetext="0.85" />
-              </div>
-
-              <div class="lab-ctrl">
-                <div class="lab-ctrl__row">
-                  <label for="labWUx" data-i18n="lab_c_ux">UI Craft &amp; A11y (w₂)</label>
-                  <output class="mono" id="labWUxOut" for="labWUx">0.75</output>
-                </div>
-                <input id="labWUx" type="range" min="0.10" max="1.00" step="0.05" value="0.75" aria-valuetext="0.75" />
-              </div>
-
-              <div class="lab-ctrl">
-                <div class="lab-ctrl__row">
-                  <label for="labGate" data-i18n="lab_c_gate">Ship Pass Gate (τ)</label>
-                  <output class="mono" id="labGateOut" for="labGate">78%</output>
-                </div>
-                <input id="labGate" type="range" min="55" max="92" step="1" value="78" aria-valuetext="78%" />
-              </div>
-
-              <p class="lab-note" id="labNote"></p>
-            </div>
-
-            <div class="lab-card lab-feed">
-              <div class="lab-card__head">
-                <h3 data-i18n="lab_feed_title">Frontier AI Papers</h3>
-                <div class="lab-feed__actions">
-                  <span class="lab-badge mono" id="labFeedStatus">2026 Snapshot</span>
-                  <button type="button" class="lab-refresh" id="labRefresh" data-i18n-attr="aria-label:lab_refresh_aria;title:lab_refresh_aria" aria-label="Refresh daily AI papers" title="Refresh daily AI papers">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
-                  </button>
-                </div>
-              </div>
-              <p class="lab-feed__sub" data-i18n="lab_feed_sub">Daily curated arXiv preprints tracked via Hugging Face Papers</p>
-
-              <ul class="lab-papers" id="labPapers"></ul>
-
-              <div class="lab-feed__foot">
-                <span class="mono" id="labFeedMeta">—</span>
-                <a href="https://huggingface.co/papers" target="_blank" rel="noopener" data-i18n="lab_feed_link">HF Daily Papers ↗</a>
-              </div>
-            </div>
+          <div class="lab-canvas-wrap" id="labCanvasWrap" role="tabpanel" aria-labelledby="labTabPrism">
+            <canvas id="labCanvas" class="lab-canvas" aria-hidden="true"></canvas>
+            <div class="lab-readout mono" id="labReadout" aria-hidden="true">+8° · Cauchy dispersion</div>
+            <button type="button" class="lab-handle" id="labHandle" role="slider" aria-label="Prism tilt angle" aria-valuemin="-48" aria-valuemax="48" aria-valuenow="8" aria-valuetext="+8° · Cauchy dispersion" aria-orientation="horizontal"></button>
           </div>
+
+          <p class="lab-hint" id="labHint">Drag the ring or use Arrow keys to tilt the prism — push past the critical angle for internal reflection</p>
         </div>
       </div>
     </section>
